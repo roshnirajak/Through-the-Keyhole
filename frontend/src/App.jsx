@@ -3,6 +3,7 @@ import Login from './components/Login';
 import VideoPlayer from './components/VideoPlayer';
 import CameraButton from './components/CameraButton';
 import MicrophoneButton from './components/MicrophoneButton';
+import ThemeChanger from './components/ThemeChanger';
 
 const App = () => {
   const [role, setRole] = useState(null);
@@ -16,12 +17,17 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Welcome, {role === 'admin' ? 'Admin' : 'User'}!</h1>
-      <VideoPlayer isAdmin={role === 'admin' ? true : false}/>
-      <div style={{ marginTop: '20px' }}>
-        <CameraButton />
-        <MicrophoneButton />
+    <div className='main-page'>
+      <div className='header'>
+        <h1>Welcome, {role === 'admin' ? 'Admin' : 'User'}!</h1>
+        <ThemeChanger />
+      </div>
+      <div className='content'>
+        <VideoPlayer isAdmin={role === 'admin' ? true : false} />
+        <div className='controls'>
+          <CameraButton role={role} />
+          <MicrophoneButton />
+        </div>
       </div>
     </div>
   );

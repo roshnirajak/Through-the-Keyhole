@@ -53,11 +53,11 @@ const VideoPlayer = ({ isAdmin }) => {
     };
 
     return (
-        <div>
+        <div className='video-area'>
             <video
                 ref={videoRef}
                 src={`${BACKEND_API_URL}/video/stream`}
-                style={{ width: '60vw' }}
+                style={{ width: '80vw' }}
             ></video>
 
             {isAdmin && (
@@ -75,6 +75,7 @@ const VideoPlayer = ({ isAdmin }) => {
 
                 </div>
             )}
+            <br /><br />
             <span>{Math.floor(currentTime)} / {Math.floor(duration)} seconds</span>
         </div>
     );

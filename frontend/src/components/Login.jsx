@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BACKEND_API_URL } from '../utils/helpers';
+import '../App.css';
 
 const Login = ({ onLogin }) => {
     const [roomName, setRoomName] = useState('');
@@ -21,11 +22,13 @@ const Login = ({ onLogin }) => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <input placeholder="Room Name" onChange={(e) => setRoomName(e.target.value)} />
-            <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={handleLogin}>Join</button>
+        <div class="login-page">
+            <div className="login-container">
+                <h2>Login</h2>
+                <input placeholder="Room Name" onChange={(e) => setRoomName(e.target.value)} />
+                <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+                <button onClick={handleLogin}>Join</button>
+            </div>
         </div>
     );
 };
