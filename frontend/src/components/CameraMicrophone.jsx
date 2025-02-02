@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { BACKEND_API_URL } from '../utils/helpers';
+import Chatbox from './ChatBox';
 
 const socket = io(BACKEND_API_URL);
 
@@ -10,11 +11,6 @@ const CameraMicrophone = () => {
   const localStreamRef = useRef(null);
   const peerConnections = useRef({});
   const [isCameraOn, setIsCameraOn] = useState(false);
-  const [isChatMinimized, setIsChatMinimized] = useState(false);
-  const [messages, setMessages] = useState('');
-  const [chatMessages, setChatMessages] = useState([]);  // Store chat messages
-  const [newMessageIndicator, setNewMessageIndicator] = useState(false); // Track new message while minimized
-  const chatRef = useRef(null);
 
   const toggleCamera = async () => {
     if (isCameraOn) {
@@ -94,14 +90,20 @@ const CameraMicrophone = () => {
 
     peerConnection.ontrack = (event) => {
       const [remoteStream] = event.streams;
+
+      // Check if stream is valid before adding
+      if (!remoteStream || !remoteStream.getTracks().some(track => track.readyState === 'live')) {
+        return; // Skip adding blank feeds
+      }
+
       setRemoteVideos((prev) => {
-        // Check if the user ID already exists
         if (prev.some((video) => video.id === userId)) {
-          return prev; // Prevent duplicates
+          return prev;
         }
         return [...prev, { id: userId, stream: remoteStream }];
       });
     };
+
 
     peerConnection.onicecandidate = (event) => {
       if (event.candidate) {
@@ -122,7 +124,7 @@ const CameraMicrophone = () => {
   useEffect(() => {
     socket.on('user-joined', (userId) => {
       if (userId !== socket.id && !peerConnections.current[userId]) {
-        createPeerConnection(userId, localStream);
+        createPeerConnection(userId);
       }
     });
 
@@ -150,7 +152,13 @@ const CameraMicrophone = () => {
       } else {
         createPeerConnection(userId);
       }
+
+      // Remove blank feeds
+      setRemoteVideos((prev) => prev.filter(({ stream }) =>
+        stream && stream.getTracks().some(track => track.readyState === 'live')
+      ));
     });
+
 
     socket.on('user-left', (userId) => {
       setRemoteVideos((prev) => prev.filter((video) => video.id !== userId));
@@ -161,45 +169,15 @@ const CameraMicrophone = () => {
       }
     });
 
-    // Listen for incoming chat messages
-    socket.on('chat-message', ({ userId, message }) => {
-      setChatMessages((prevMessages) => [
-        ...prevMessages,
-        { userId, message },
-      ]);
-    });
-
-    // Listen for new message event and update the red dot
-    socket.on('new-message', () => {
-      // Only show the red dot if the chat is minimized
-      if (isChatMinimized) {
-        setNewMessageIndicator(true);
-      }
-    });
-
     return () => {
       socket.off('user-joined');
       socket.off('signal');
       socket.off('ice-candidate');
       socket.off('user-left');
       socket.off('camera-toggle');
-      socket.off('chat-message'); // Clean up the socket event
-      socket.off('new-message');  // Clean up new-message event
     };
-  }, [isChatMinimized]);
+  }, []);
 
-  const handleSendMessage = () => {
-    if (messages.trim()) {
-      socket.emit('chat-message', { userId: socket.id, message: messages });
-      setMessages(''); // Clear the input after sending
-      socket.emit('new-message'); // Notify all users about the new message
-    }
-  };
-
-  const handleChatHeaderClick = () => {
-    setIsChatMinimized(!isChatMinimized);
-    setNewMessageIndicator(false); // Reset the red dot when chat is maximized
-  };
 
   return (
     <div className="camera-container">
@@ -208,52 +186,23 @@ const CameraMicrophone = () => {
       </button>
       <div className="camera-feeds">
         <video ref={localVideoRef} autoPlay muted className="camera-feed"></video>
-        {remoteVideos.map(({ id, stream }) =>
-          stream && stream.getTracks().some((track) => track.readyState === 'live') ? (
+        {remoteVideos
+          .filter(({ stream }) => stream && stream.getTracks().some(track => track.readyState === 'live'))
+          
+          .map(({ id, stream }) => (
             <video
               key={id}
               autoPlay
               ref={(el) => {
-                if (el && stream instanceof MediaStream) el.srcObject = stream;
+                if (el) el.srcObject = stream;
               }}
               className="camera-feed"
             ></video>
-          ) : null
-        )}
-      </div>
+          ))}
 
-      <div className={`chatbox ${isChatMinimized ? 'minimized' : ''}`}>
-        <div className="chat-header" onClick={handleChatHeaderClick}>
-          <span>
-            Chat
-            {newMessageIndicator && isChatMinimized && (
-              <span className="new-message-dot"></span>
-            )}
-          </span>
-          <button onClick={() => setIsChatMinimized(!isChatMinimized)}>
-            {isChatMinimized ? 'Maximize' : 'Minimize'}
-          </button>
-        </div>
-        <div className="chat-body" ref={chatRef}>
-          {/* Displaying chat messages */}
-          <div className="messages">
-            {chatMessages.map((msg, index) => (
-              <div key={index} className="message">
-                <strong>{msg.userId}:</strong> {msg.message}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="chat-footer">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={messages}
-            onChange={(e) => setMessages(e.target.value)}
-          />
-          <button onClick={handleSendMessage}>Send</button>
-        </div>
+
       </div>
+      <Chatbox />
     </div>
   );
 };

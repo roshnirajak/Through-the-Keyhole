@@ -44,9 +44,8 @@ io.on('connection', (socket) => {
   });
 
   // Handle chat messages
-  socket.on('chat-message', ({ userId, message }) => {
-    io.emit('chat-message', { userId, message });
-    io.emit('new-message'); 
+  socket.on('send-message', (message) => {
+    socket.broadcast.emit('receive-message', message);
   });
 
   socket.on('disconnect', () => {

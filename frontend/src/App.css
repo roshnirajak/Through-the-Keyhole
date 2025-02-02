@@ -117,12 +117,13 @@
   justify-content: space-between;
   align-items: flex-start;
   margin: 20px;
-  gap: 20px;
+  gap: 0px;
+  flex-direction: column-reverse;
 }
 
 /* Style the video player */
 .content .video-player {
-  flex: 1; 
+  flex: 1;
   max-width: 60%;
 }
 
@@ -130,7 +131,8 @@
 .controls {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* Aligns to the right */
+  align-items: flex-end;
+  /* Aligns to the right */
   gap: 15px;
 }
 
@@ -145,7 +147,6 @@
 /* Camera feeds stacked in a column */
 .camera-feeds {
   display: flex;
-  flex-direction: column;
   gap: 10px;
   margin-top: 10px;
 }
@@ -153,7 +154,7 @@
 /* Individual camera feed */
 .camera-feed {
   width: 180px;
-  border: 2px solid black;
+  border: 0px;
   border-radius: 8px;
 }
 
@@ -176,18 +177,6 @@
   background-color: #0056b3;
 }
 
-.feeds {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.feed {
-  width: 200px;
-  border: 2px solid black;
-  border-radius: 8px;
-}
-
 .camera-chat-container.minimized {
   width: 200px;
   height: 100px;
@@ -200,7 +189,9 @@
   margin-bottom: 10px;
 }
 
-.camera-btn, .minimize-btn, .send-btn {
+.camera-btn,
+.minimize-btn,
+.send-btn {
   padding: 5px 10px;
   background-color: #4caf50;
   color: white;
@@ -223,85 +214,108 @@
 
 .chatbox {
   position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 300px;
-  height: 300px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-  transform: translateY(0);
-}
-
-.chatbox.minimized {
-  transform: translateY(90%);
-}
-
-.chat-header {
-  padding: 10px;
-  background-color: #f1f1f1;
+  bottom: 5px;
+  right: 20px;
+  width: 230px;
+  height: 600px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
 }
 
-.chat-body {
-  padding: 10px;
+.chatbox.closed {
+  height: 40px;
+}
+
+.messages-container {
+  flex: 1;
   overflow-y: auto;
-  height: 200px;
-}
-
-.chat-footer {
   padding: 10px;
-  display: flex;
-  justify-content: space-between;
 }
 
-.messages {
+.message {
   margin-bottom: 10px;
 }
 
-.chat-footer input {
-  width: 80%;
-  padding: 5px;
+.input-container {
+  display: flex;
+  padding: 10px;
 }
 
-.chat-footer button {
-  width: 15%;
-  padding: 5px;
-}
-
-.chat-header span {
-  position: relative;
-}
-
-.new-message-dot {
+.toggle-chatbox-btn {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: 5px;
+  right: 5px;
+  background-color: #ddd;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.new-message-indicator {
   width: 10px;
   height: 10px;
-  background-color: red;
   border-radius: 50%;
+  margin-left: 10px;
+  background-color: red;
 }
+
+.new-message-indicator.red-dot {
+  background-color: red;
+}
+
+.new-message-indicator.red-dot-timer {
+  background-color: gray;
+}
+
+input {
+  flex: 1;
+  padding: 5px;
+}
+
+button {
+  margin-left: 5px;
+  padding: 5px;
+}
+
 
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .content {
-      flex-direction: column;
-      align-items: center;
+  .content {}
+
+  .content .video-player,
+  .controls {
+    max-width: 100%;
   }
 
-  .content .video-player, .controls {
-      max-width: 100%;
+  .video-container {
+    width: 90vw;
+  }
+
+  .camera-feeds {
+    width: 100vw;
+    display: flex;
+    gap: 10px;
+    margin-left: 100px;
+    overflow: auto;
+  }
+
+  .chatbox {
+    width: 300px;
   }
 }
+
 .video-container {
   position: relative;
-  width: 90vw;
+  width: 64vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -341,7 +355,8 @@
   margin: 0 10px;
   appearance: none;
   height: 5px;
-  background: rgba(221, 235, 255, 0.7); /* Blue shade */
+  background: rgba(221, 235, 255, 0.7);
+  /* Blue shade */
   border-radius: 5px;
   outline: none;
   transition: background 0.3s;
@@ -352,7 +367,8 @@
   appearance: none;
   width: 12px;
   height: 12px;
-  background: #007bff; /* Solid blue */
+  background: #007bff;
+  /* Solid blue */
   border-radius: 50%;
   cursor: pointer;
 }
@@ -360,7 +376,8 @@
 .seek-bar::-moz-range-thumb {
   width: 12px;
   height: 12px;
-  background: #007bff; /* Solid blue */
+  background: #007bff;
+  /* Solid blue */
   border-radius: 50%;
   cursor: pointer;
 }

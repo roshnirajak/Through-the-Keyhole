@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Login from './components/Login';
 import VideoPlayer from './components/VideoPlayer';
 import CameraMicrophone from './components/CameraMicrophone';
+import Chatbox from './components/ChatBox';
 import ThemeChanger from './components/ThemeChanger';
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <VideoPlayer isAdmin={role === 'admin' ? true : false} />
         <div className='controls'>
           <CameraMicrophone role={role} />
+
         </div>
       </div>
     </div>
