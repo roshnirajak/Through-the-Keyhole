@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import Login from './components/Login';
 import VideoPlayer from './components/VideoPlayer';
-import CameraButton from './components/CameraButton';
-import MicrophoneButton from './components/MicrophoneButton';
+import CameraMicrophone from './components/CameraMicrophone';
 import ThemeChanger from './components/ThemeChanger';
 
 const App = () => {
@@ -25,8 +24,7 @@ const App = () => {
       <div className='content'>
         <VideoPlayer isAdmin={role === 'admin' ? true : false} />
         <div className='controls'>
-          <CameraButton role={role} />
-          <MicrophoneButton />
+          <CameraMicrophone role={role} />
         </div>
       </div>
     </div>

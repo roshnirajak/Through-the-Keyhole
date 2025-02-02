@@ -43,8 +43,15 @@ io.on('connection', (socket) => {
     io.emit('seek-video', timestamp);
   });
 
+  // Handle chat messages
+  socket.on('chat-message', ({ userId, message }) => {
+    io.emit('chat-message', { userId, message });
+    io.emit('new-message'); 
+  });
+
   socket.on('disconnect', () => {
     console.log('A user disconnected');
+    socket.broadcast.emit('user-left', socket.id);
   });
 });
 
