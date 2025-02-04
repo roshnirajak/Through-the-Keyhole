@@ -103,6 +103,7 @@
 
 .header h1 {
   margin: 0;
+  font-family: "Cedarville Cursive", serif;
   font-size: 2rem;
   font-weight: bold;
 }
@@ -140,7 +141,7 @@
 .camera-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   width: 200px;
 }
 
@@ -165,7 +166,7 @@
 }
 
 .camera-btn {
-  background-color: #007bff;
+  background-color: #3535359e;
   color: white;
   padding: 8px 12px;
   border: none;
@@ -174,7 +175,7 @@
 }
 
 .camera-btn:hover {
-  background-color: #0056b3;
+  background-color: #c7c7c76d;
 }
 
 .camera-chat-container.minimized {
@@ -189,7 +190,6 @@
   margin-bottom: 10px;
 }
 
-.camera-btn,
 .minimize-btn,
 .send-btn {
   padding: 5px 10px;
@@ -216,7 +216,7 @@
   position: fixed;
   bottom: 5px;
   right: 20px;
-  width: 230px;
+  width: 300px;
   height: 600px;
   border: 1px solid #ccc;
   border-radius: 10px;

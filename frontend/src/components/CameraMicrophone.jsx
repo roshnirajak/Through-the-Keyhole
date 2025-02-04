@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
+import { Camera } from 'lucide-react';
 import { BACKEND_API_URL } from '../utils/helpers';
 import Chatbox from './ChatBox';
 
@@ -182,7 +183,7 @@ const CameraMicrophone = () => {
   return (
     <div className="camera-container">
       <button className="camera-btn" onClick={toggleCamera}>
-        {isCameraOn ? 'Turn Off Camera' : 'Start Camera'}
+        {isCameraOn ? <Camera size={24} color="black" /> : <Camera size={24} color="white" />}
       </button>
       <div className="camera-feeds">
         <video ref={localVideoRef} autoPlay muted className="camera-feed"></video>

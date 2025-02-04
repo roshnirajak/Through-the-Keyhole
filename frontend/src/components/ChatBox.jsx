@@ -101,29 +101,42 @@ const Chatbox = () => {
           <span className="new-message-indicator red-dot"></span>
         )}
       </button>
-      <div className="messages-container" style={{ overflowY: 'auto', maxHeight: '400px' }}>
-        {messages.map((msg) => {
-          const messageColor = generateColorFromSocketId(msg.senderId);
-          return (
-            <div
-              key={msg.timestamp}
-              className={`message ${msg.senderId === currentUserId ? 'self' : 'other'}`}
-              style={{
-                maxWidth: '80%',
-                backgroundColor: msg.senderId === currentUserId ? '#D3D3D3' : messageColor,
-                alignSelf: msg.senderId === currentUserId ? 'flex-end' : 'flex-start',
-                borderRadius: msg.senderId === currentUserId ? '20px 20px 0px 20px' : '20px 20px 20px 0px',
-                padding: '10px 15px',
-                color: msg.senderId === currentUserId ? '#000' : '#FFF',
-              }}
-            >
-              {/* <strong> */}
-              <p style={{fontSize:"8px"}}>{msg.senderId}:</p>
-                {/* </strong>  */}
-                <p>{msg.text}</p>
-            </div>
-          );
-        })}
+      <div className="messages-container" style={{ overflowY: 'auto' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          {messages.map((msg) => {
+            const messageColor = generateColorFromSocketId(msg.senderId);
+            const isSelf = msg.senderId === currentUserId;
+
+            return (
+              <div
+                key={msg.timestamp}
+                className="chatLine"
+                style={{
+                  maxWidth: '100%',
+                  display: 'flex',
+                  justifyContent: isSelf ? 'flex-end' : 'flex-start',
+                }}
+              >
+                <div
+                  className={`message ${isSelf ? 'self' : 'other'}`}
+                  style={{
+                    maxWidth: '70%',
+                    backgroundColor: isSelf ? '#D3D3D3' : messageColor,
+                    borderRadius: isSelf ? '20px 20px 0px 20px' : '20px 20px 20px 0px',
+                    padding: '10px 15px',
+                    color: isSelf ? '#000' : '#FFF',
+                    wordWrap: 'break-word',
+                    textAlign: 'left', // Ensures text stays left-aligned inside the bubble
+                  }}
+                >
+                  <p style={{ fontSize: '8px', marginBottom: '5px' }}>{msg.senderId}:</p>
+                  <p style={{ margin: 0 }}>{msg.text}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* for scroll */}
         <div ref={messagesEndRef} />
       </div>

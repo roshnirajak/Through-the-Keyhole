@@ -19,7 +19,8 @@ const App = () => {
   return (
     <div className='main-page'>
       <div className='header'>
-        <h1>Welcome, {role === 'admin' ? 'Admin' : 'User'}!</h1>
+        <h1>through the keyhole</h1>
+        {/* <h1>Welcome, {role === 'admin' ? 'Admin' : 'User'}!</h1> */}
         <ThemeChanger />
       </div>
       <div className='content'>
