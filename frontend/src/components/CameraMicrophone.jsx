@@ -80,7 +80,10 @@ const CameraMicrophone = () => {
     if (peerConnections.current[userId]) return;
 
     const peerConnection = new RTCPeerConnection({
-      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+      iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "turn:13.232.50.63:3478", username: "watermelon", credential: "kitty123" }
+      ]
     });
 
     if (localStreamRef.current) {
